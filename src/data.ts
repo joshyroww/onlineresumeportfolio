@@ -28,12 +28,12 @@ export const SKILLS = [
   {
     cat: "PROGRAMMING",
     items: [
-      { n: "JavaScript", s: 4 },
-      { n: "TypeScript", s: 3 },
-      { n: "Python", s: 3 },
+      { n: "JavaScript", s: 5 },
+      { n: "TypeScript", s: 4 },
+      { n: "Python", s: 4 },
       { n: "Java", s: 3 },
       { n: "PHP", s: 3 },
-      { n: "Kotlin", s: 3 },
+      { n: "Kotlin", s: 2 },
     ],
   },
   {
@@ -41,34 +41,34 @@ export const SKILLS = [
     items: [
       { n: "HTML5", s: 5 },
       { n: "CSS3", s: 4 },
-      { n: "React", s: 4 },
-      { n: "Tailwind CSS", s: 4 },
-      { n: "Node.js", s: 3 },
-      { n: "Next.js", s: 3 },
+      { n: "React", s: 5 },
+      { n: "Tailwind CSS", s: 5 },
+      { n: "Node.js", s: 4 },
+      { n: "Next.js", s: 5 },
     ],
   },
   {
     cat: "DATABASES",
     items: [
-      { n: "MySQL", s: 4 },
-      { n: "PostgreSQL", s: 3 },
-      { n: "MongoDB", s: 3 },
-      { n: "Firebase", s: 3 },
+      { n: "MySQL", s: 5 },
+      { n: "PostgreSQL", s: 4 },
+      { n: "MongoDB", s: 2 },
+      { n: "Firebase", s: 4 },
     ],
   },
   {
     cat: "UI / UX",
     items: [
       { n: "Figma", s: 3 },
-      { n: "Responsive Design", s: 4 },
-      { n: "User Research", s: 3 },
+      { n: "Responsive Design", s: 5 },
+      { n: "User Research", s: 4 },
     ],
   },
   {
     cat: "TOOLS",
     items: [
-      { n: "Git", s: 4 },
-      { n: "VS Code", s: 4 },
+      { n: "Git", s: 5 },
+      { n: "VS Code", s: 5 },
       { n: "npm", s: 4 },
       { n: "Vite", s: 4 },
     ],
@@ -76,9 +76,9 @@ export const SKILLS = [
   {
     cat: "SYSTEMS",
     items: [
-      { n: "System Analysis", s: 4 },
-      { n: "Software Design", s: 3 },
-      { n: "Testing", s: 3 },
+      { n: "System Analysis", s: 5 },
+      { n: "Software Design", s: 5 },
+      { n: "Testing", s: 4 },
     ],
   },
 ];
