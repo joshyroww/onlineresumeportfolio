@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import profilePhoto from "./assets/profile-photo.jpg";
 import Reveal from "./components/Reveal";
@@ -74,6 +74,8 @@ function Stamp({ text, stampClass = "" }: { text: string; stampClass?: string })
 }
 
 function App() {
+  const [feed, setFeed] = useState(false);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -94,7 +96,7 @@ function App() {
   });
 
   return (
-    <div className="desk">
+    <div className={`desk ${feed ? "feed-mode" : ""}`}>
       <a href="#about" className="skip-link">Skip to content</a>
 
       {/* Section nav (desktop, on the desk) */}
@@ -112,13 +114,22 @@ function App() {
         <span className="text-paper/40 mt-2 pl-1">KEYS 1–8</span>
       </nav>
 
-      {/* Print button */}
-      <button
-        onClick={() => window.print()}
-        className="no-print fixed right-4 bottom-4 z-50 stamp stamp-stamp !border-ink !text-paper bg-ink px-4 py-2 text-xs hover:!border-stamp hover:!bg-stamp transition-colors"
-      >
-        PRINT / SAVE PDF
-      </button>
+      {/* Print + layout buttons */}
+      <div className="no-print fixed right-4 bottom-4 z-50 flex flex-col gap-2 items-end">
+        <button
+          onClick={() => setFeed((f) => !f)}
+          className="stamp !border-ink !text-ink bg-paper/90 px-3 py-1.5 text-[11px] hover:bg-stamp hover:!border-stamp hover:!text-paper transition-colors"
+          title="Toggle between a single receipt and continuous-feed dot-matrix paper"
+        >
+          {feed ? "◉ CONTINUOUS FEED" : "◌ SINGLE RECEIPT"}
+        </button>
+        <button
+          onClick={() => window.print()}
+          className="stamp stamp-stamp !border-ink !text-paper bg-ink px-4 py-2 text-xs hover:!border-stamp hover:!bg-stamp transition-colors"
+        >
+          PRINT / SAVE PDF
+        </button>
+      </div>
 
       {/* Tape strip above receipt */}
       <div className="no-print fixed top-0 left-0 right-0 z-50 bg-ink text-paper/85 font-mono text-[11px] tracking-[0.3em] overflow-hidden py-1.5">
@@ -132,6 +143,26 @@ function App() {
       </div>
 
       <main className="receipt receipt-zigzag-bottom mt-10 font-mono text-sm text-ink">
+        {/* print-head scan line + continuous-feed tractor strips */}
+        <div className="scan-line no-print" aria-hidden="true" />
+        <div className="feed-strip left" aria-hidden="true" />
+        <div className="feed-strip right" aria-hidden="true" />
+
+        {/* Print-only receipt header (Ctrl+P / Save as PDF) */}
+        <div className="print-only mb-4">
+          <p className="text-center font-bold tracking-[0.25em] text-sm">
+            JOSHUA ORO · SYSTEM DEVELOPER
+          </p>
+          <p className="text-center text-xs text-ink-soft">
+            SHIPPING MANIFEST — 4TH YEAR BSIT · HOLY CROSS OF DAVAO COLLEGE · PRINTED {today}
+          </p>
+          <div className="mt-3 border-t-2 border-dashed border-ink/50 text-center">
+            <span className="relative -top-2.5 bg-paper px-2 text-[10px] tracking-[0.2em] text-ink-faint">
+              ✂ SHIPPING MANIFEST ✂
+            </span>
+          </div>
+        </div>
+
         {/* ============ HEADER / SHIPPING LABEL ============ */}
         <header className="relative px-6 pt-8 pb-5 md:px-10">
           <div className="flex items-center justify-between text-[11px] tracking-[0.25em] text-ink-soft mb-6">
@@ -438,6 +469,19 @@ function App() {
             tip: press <kbd className="border border-ink/40 px-1">1</kbd>–<kbd className="border border-ink/40 px-1">8</kbd> to jump between sections
           </p>
         </footer>
+
+        {/* Print-only receipt footer (Ctrl+P easter egg) */}
+        <div className="print-only mt-6 border-t-2 border-dashed border-ink/40 pt-4 text-center">
+          <p className="text-[11px] tracking-[0.25em] text-ink-soft">✦ END OF RECEIPT ✦</p>
+          <p className="mt-2 text-[10px] tracking-[0.2em] text-ink-faint">
+            JOSHUA ORO · {CONTACT.email} · {CONTACT.phone}
+          </p>
+          <div className="mt-4 border-t-2 border-dashed border-ink/50 text-center">
+            <span className="relative -top-2.5 bg-paper px-2 text-[10px] tracking-[0.2em] text-ink-faint">
+              ✂ CUT HERE · KEEP FOR REFERENCE ✂
+            </span>
+          </div>
+        </div>
       </main>
     </div>
   );

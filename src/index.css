@@ -36,6 +36,7 @@ body {
   background:
     radial-gradient(1200px 500px at 50% -10%, rgba(255, 214, 130, 0.06), transparent 60%),
     radial-gradient(900px 600px at 85% 110%, rgba(200, 50, 46, 0.05), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
     var(--color-desk);
 }
 
@@ -48,7 +49,85 @@ body {
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.4) inset,
     0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  /* thermal ink bleed — ink is never perfectly crisp */
+  text-shadow: 0 0 0.5px rgba(27, 26, 23, 0.6);
+  /* paper feeds up out of the printer */
+  animation: feed-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+@keyframes feed-in {
+  from {
+    transform: translateY(56px);
+    opacity: 0.35;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* scan line sweeping up the paper on load */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 45;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(27, 26, 23, 0.18), transparent);
+  animation: scan 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes scan {
+  from { top: -6px; opacity: 0; }
+  40% { opacity: 1; }
+  to { top: 100%; opacity: 0; }
+}
+
+/* ---------- Continuous-feed (dot-matrix) mode ---------- */
+.feed-mode .receipt {
+  max-width: 960px;
+}
+.feed-strip {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 26px;
+  z-index: 30;
+  pointer-events: none;
+  background-color: rgba(27, 26, 23, 0.05);
+}
+.feed-strip.left { left: 0; border-right: 1px dashed rgba(27, 26, 23, 0.35); }
+.feed-strip.right { right: 0; border-left: 1px dashed rgba(27, 26, 23, 0.35); }
+.feed-strip::before,
+.feed-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 13px 16px,
+    var(--color-desk) 5.5px,
+    transparent 6px
+  );
+  background-size: 26px 32px;
+  background-repeat: repeat-y;
+}
+.feed-strip::after {
+  background-image: radial-gradient(
+    circle at 13px 16px,
+    transparent 5px,
+    rgba(27, 26, 23, 0.35) 5px,
+    rgba(27, 26, 23, 0.35) 5.5px,
+    transparent 6px
+  );
+}
+.feed-mode .feed-strip { display: block; }
+
+/* print head blips on the sides in feed mode */
+.feed-mode .marginalia-note {
+  color: var(--color-ink-faint);
+}
+
 
 /* paper grain */
 .receipt::before {
@@ -320,12 +399,21 @@ a.ink-link:hover {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .receipt, .scan-line { animation: none; }
   .tape-track, .flicker { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .stamp-stamp { animation: none; }
 }
 
-/* ---------- PRINT: clean A4 resume ---------- */
+/* Print-only material (the Ctrl+P easter egg) */
+.print-only { display: none; }
+
+@page {
+  size: A4;
+  margin: 14mm 16mm;
+}
+
+/* ---------- PRINT: the resume comes out as an actual printed receipt ---------- */
 @media print {
   body { background: #fff; }
   .desk { padding: 0; display: block; background: #fff; }
@@ -334,9 +422,12 @@ a.ink-link:hover {
     max-width: none;
     box-shadow: none;
     background: #fff;
+    text-shadow: none;
+    animation: none;
   }
   .receipt::before { display: none; }
   .receipt::after, .receipt-zigzag-bottom::after { display: none; }
+  .feed-strip { display: none; }
   .cut-line { border-top-style: dotted; }
   .marginalia-note { position: static; transform: none; }
   .tape-track { animation: none; flex-wrap: wrap; }
@@ -345,4 +436,5 @@ a.ink-link:hover {
   .stamp { -webkit-mask-image: none; mask-image: none; }
   .reveal { opacity: 1 !important; transform: none !important; }
   section { break-inside: avoid; }
+  .print-only { display: block !important; }
 }
