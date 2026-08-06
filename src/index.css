@@ -1,0 +1,348 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo Black", "Archivo", sans-serif;
+
+  --color-paper: #f4f1e8;
+  --color-paper-2: #ece8da;
+  --color-ink: #1b1a17;
+  --color-ink-soft: #55524a;
+  --color-ink-faint: #8b867a;
+  --color-stamp: #c8322e;
+  --color-linkblue: #33618f;
+  --color-desk: #2b2720;
+  --color-desk-2: #1f1c17;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-mono);
+  background: var(--color-desk);
+  color: var(--color-ink);
+  cursor: crosshair;
+}
+
+/* ---------- Desk backdrop (photo-strip border around receipt) ---------- */
+.desk {
+  min-height: 100vh;
+  padding: 5vh 16px 10vh;
+  display: flex;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgba(255, 214, 130, 0.06), transparent 60%),
+    radial-gradient(900px 600px at 85% 110%, rgba(200, 50, 46, 0.05), transparent 60%),
+    var(--color-desk);
+}
+
+/* ---------- Receipt paper ---------- */
+.receipt {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: var(--color-paper);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 30px 60px -20px rgba(0, 0, 0, 0.7);
+}
+
+/* paper grain */
+.receipt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+}
+
+/* serrated zigzag top & bottom */
+.receipt::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -9px;
+  height: 9px;
+  z-index: 2;
+  background: radial-gradient(circle at 6px -2px, transparent 9px, var(--color-desk) 10px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+}
+
+.receipt-zigzag-bottom::after {
+  top: auto;
+  bottom: -9px;
+  background: radial-gradient(circle at 6px 11px, transparent 9px, var(--color-desk) 10px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+}
+
+/* ---------- Barcode ---------- */
+.barcode {
+  height: 44px;
+  min-width: 180px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-ink) 0 2px,
+    transparent 2px 4px,
+    var(--color-ink) 4px 5px,
+    transparent 5px 8px,
+    var(--color-ink) 8px 12px,
+    transparent 12px 14px,
+    var(--color-ink) 14px 15px,
+    transparent 15px 19px,
+    var(--color-ink) 19px 22px,
+    transparent 22px 25px,
+    var(--color-ink) 25px 26px,
+    transparent 26px 30px
+  );
+  width: 100%;
+  max-width: 420px;
+}
+.barcode-sm {
+  height: 26px;
+  min-width: 120px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-ink) 0 1px,
+    transparent 1px 3px,
+    var(--color-ink) 3px 5px,
+    transparent 5px 6px,
+    var(--color-ink) 6px 7px,
+    transparent 7px 11px,
+    var(--color-ink) 11px 12px,
+    transparent 12px 13px,
+    var(--color-ink) 13px 15px,
+    transparent 15px 18px,
+    var(--color-ink) 18px 19px,
+    transparent 19px 23px
+  );
+  width: 100%;
+  max-width: 300px;
+}
+
+/* ---------- Itemized receipt rows (dotted leaders) ---------- */
+.leader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.leader-label {
+  flex-shrink: 0;
+}
+.leader-fill {
+  flex: 1;
+  min-width: 1rem;
+  border-bottom: 2px dotted rgba(27, 26, 23, 0.35);
+  transform: translateY(-4px);
+}
+.leader-value {
+  flex-shrink: 1;
+  min-width: 0;
+  font-weight: 700;
+  text-align: right;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* ---------- Red stamp ---------- */
+.stamp {
+  display: inline-block;
+  border: 3px solid var(--color-stamp);
+  color: var(--color-stamp);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-weight: 700;
+  transform: rotate(-4deg);
+  box-shadow: 0 0 0 1px var(--color-stamp) inset;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='0.45'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+.stamp-stamp {
+  animation: stampIn 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+@keyframes stampIn {
+  0% { transform: rotate(-4deg) scale(2.4); opacity: 0; }
+  60% { transform: rotate(-4deg) scale(0.92); opacity: 1; }
+  100% { transform: rotate(-4deg) scale(1); opacity: 1; }
+}
+
+/* ---------- Dashed cut lines ---------- */
+.cut-line {
+  position: relative;
+  border-top: 2px dashed rgba(27, 26, 23, 0.5);
+  margin: 2rem 0;
+  text-align: center;
+}
+.cut-line > span {
+  position: relative;
+  top: -0.75em;
+  background: var(--color-paper);
+  padding: 0 0.6rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* ---------- Marginalia ---------- */
+.marginalia {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-ink-soft);
+  border-left: 3px solid var(--color-stamp);
+  padding-left: 0.6rem;
+  transform: rotate(-0.5deg);
+  opacity: 0.9;
+}
+.marginalia-note {
+  position: absolute;
+  transform: rotate(-90deg) translateX(-100%);
+  transform-origin: left top;
+  left: -1.5rem;
+  top: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-faint);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- Faded blue links ---------- */
+a.ink-link {
+  color: var(--color-linkblue);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Crect x='6' y='6' width='16' height='16' rx='2' fill='%23c8322e' opacity='0.9'/%3E%3Crect x='6' y='6' width='16' height='16' rx='2' fill='none' stroke='%231b1a17' stroke-width='1.5'/%3E%3C/svg%3E") 14 14, pointer;
+}
+a.ink-link:hover {
+  color: var(--color-stamp);
+  text-decoration-style: solid;
+}
+
+/* thermal scanner line that "prints" on scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Physical micro-interactions ---------- */
+.shift:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 rgba(27, 26, 23, 0.9); }
+.shift { transition: transform 0.12s ease, box-shadow 0.12s ease; }
+
+.punch {
+  position: relative;
+}
+.punch::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-paper);
+  border: 2px dashed rgba(27, 26, 23, 0.4);
+  transform: translateY(-50%);
+}
+
+/* header flicker */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.4; }
+  94% { opacity: 1; }
+  96% { opacity: 0.7; }
+  97% { opacity: 1; }
+}
+.flicker { animation: flicker 5s linear infinite; }
+
+/* marquee tape */
+@keyframes scrolltape {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.tape-track {
+  display: flex;
+  width: max-content;
+  animation: scrolltape 22s linear infinite;
+}
+
+/* section title bar */
+.title-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 2px solid var(--color-ink);
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+.title-bar .hash {
+  color: var(--color-stamp);
+}
+
+/* skip link for keyboard */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 60;
+  background: var(--color-stamp);
+  color: var(--color-paper);
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-stamp);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .tape-track, .flicker { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .stamp-stamp { animation: none; }
+}
+
+/* ---------- PRINT: clean A4 resume ---------- */
+@media print {
+  body { background: #fff; }
+  .desk { padding: 0; display: block; background: #fff; }
+  .no-print { display: none !important; }
+  .receipt {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+  .receipt::before { display: none; }
+  .receipt::after, .receipt-zigzag-bottom::after { display: none; }
+  .cut-line { border-top-style: dotted; }
+  .marginalia-note { position: static; transform: none; }
+  .tape-track { animation: none; flex-wrap: wrap; }
+  a { color: #000; }
+  a.ink-link { color: #000; text-decoration: underline; }
+  .stamp { -webkit-mask-image: none; mask-image: none; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  section { break-inside: avoid; }
+}
