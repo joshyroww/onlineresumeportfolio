@@ -114,6 +114,15 @@ export const COMPANIES = [
 export const PROJECTS = [
   {
     id: "PJT-001",
+    name: "Lexora",
+    type: "AI Thesis · Reading App",
+    stack: ["Next.js 16", "TypeScript", "Prisma", "Supabase", "Whisper ASR", "Tailwind"],
+    desc: "AI-assisted reading & progress-tracking web app for dyslexic learners: Filipino (Marungko) word exercises, pre-trained Whisper oral-reading scoring, adaptive levels, analytics and CSV export. My undergrad thesis project.",
+    link: "https://github.com/joshuaoro/lexora",
+    featured: true,
+  },
+  {
+    id: "PJT-002",
     name: "Plant Exchange",
     type: "Full-Stack Web App",
     stack: ["Next.js 14", "MySQL", "Tailwind", "Auth"],
@@ -121,7 +130,7 @@ export const PROJECTS = [
     link: "https://github.com/joshyroww/plant-exchange",
   },
   {
-    id: "PJT-002",
+    id: "PJT-003",
     name: "SocialApp",
     type: "Android + REST API",
     stack: ["Kotlin", "Android", "PHP", "MySQL", "Retrofit"],
@@ -129,7 +138,7 @@ export const PROJECTS = [
     link: "https://github.com/joshyroww/IPT102",
   },
   {
-    id: "PJT-003",
+    id: "PJT-004",
     name: "Cebu–Bohol Digital Chronicle",
     type: "Interactive Story",
     stack: ["React", "Vite", "TS", "Tailwind", "Framer Motion"],
@@ -137,7 +146,7 @@ export const PROJECTS = [
     link: "https://github.com/joshyroww/cebu-bohol-digital-chronicle",
   },
   {
-    id: "PJT-004",
+    id: "PJT-005",
     name: "Thermal Receipt Resume",
     type: "Portfolio / This Site",
     stack: ["React", "Vite", "Tailwind", "qrcode.react"],
@@ -161,10 +170,14 @@ export const CERTS = [
   },
 ];
 
-export const NOW = [
+export const NOW: { label: string; value: string; href?: string }[] = [
   { label: "PURSUING", value: "4th year BSIT @ HCDC — thesis & OJT season" },
-  { label: "BUILDING", value: "Plant Exchange — growing the v1 feature set" },
-  { label: "LEARNING", value: "Next.js, Android (Kotlin), cleaner SQL" },
+  {
+    label: "BUILDING",
+    value: "Lexora — AI-assisted reading & progress tracking for dyslexic learners",
+    href: "https://github.com/joshuaoro/lexora",
+  },
+  { label: "LEARNING", value: "Cybersecurity" },
   { label: "OPEN TO", value: "Internship · freelance · thesis collab" },
 ];
 

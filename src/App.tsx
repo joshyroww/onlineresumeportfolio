@@ -33,12 +33,30 @@ function SectionTitle({ no, title }: { no: string; title: string }) {
   );
 }
 
-function LeaderRow({ label, value, strong = false }: { label: string; value: React.ReactNode; strong?: boolean }) {
+function LeaderRow({
+  label,
+  value,
+  strong = false,
+  href,
+}: {
+  label: string;
+  value: React.ReactNode;
+  strong?: boolean;
+  href?: string;
+}) {
   return (
     <div className="leader py-1">
       <span className={`leader-label ${strong ? "" : "text-ink-soft"}`}>{label}</span>
       <span className="leader-fill" />
-      <span className={`leader-value ${strong ? "" : "font-normal"}`}>{value}</span>
+      <span className={`leader-value ${strong ? "" : "font-normal"}`}>
+        {href ? (
+          <a className="ink-link" href={href} target="_blank" rel="noreferrer">
+            {value} ↗
+          </a>
+        ) : (
+          value
+        )}
+      </span>
     </div>
   );
 }
@@ -272,7 +290,12 @@ function App() {
                   rel="noreferrer"
                   className="ink-link block no-underline"
                 >
-                  <div className="shift border border-ink/40 p-4 hover:border-ink">
+                  <div className="shift border border-ink/40 p-4 hover:border-ink relative">
+                    {p.featured && (
+                      <span className="stamp absolute -top-5 right-4 !py-1 !text-[10px] stamp-stamp no-print">
+                        FEATURED
+                      </span>
+                    )}
                     <div className="flex items-baseline gap-3">
                       <span className="text-stamp font-bold text-xs">{p.id}</span>
                       <span className="font-bold text-base">{p.name}</span>
@@ -325,7 +348,7 @@ function App() {
             <SectionTitle no="07" title="CURRENT STATUS · NOW" />
             <div className="space-y-2">
               {NOW.map((n) => (
-                <LeaderRow key={n.label} label={n.label} value={n.value} />
+                <LeaderRow key={n.label} label={n.label} value={n.value} href={n.href} />
               ))}
             </div>
             <div className="mt-4 flex justify-end">
